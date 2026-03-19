@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rasika 🎂</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #f5f0e8;
+    --black: #111010;
+    --red: #c0392b;
+    --gold: #c9a84c;
+    --warm-white: #faf8f4;
+    --charcoal: #2c2c2c;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--red);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transition: transform 0.15s ease;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9000;
+    opacity: 0.35;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 60px 50px 80px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-tag {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s forwards;
+  }
+
+  .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 10vw, 140px);
+    line-height: 0.9;
+    letter-spacing: -2px;
+    color: var(--cream);
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+
+  .hero-name span {
+    color: var(--red);
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.65em;
+    display: block;
+  }
+
+  .hero-quote {
+    margin-top: 40px;
+    font-size: 11px;
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+    color: rgba(245,240,232,0.55);
+    max-width: 360px;
+    border-left: 2px solid var(--red);
+    padding-left: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.9s forwards;
+  }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .photo-hero {
+    position: absolute;
+    inset: 0;
+    background: var(--charcoal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .photo-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.75;
+    filter: contrast(1.1) saturate(0.85);
+    transition: transform 8s ease;
+  }
+  .photo-hero:hover img { transform: scale(1.04); }
+
+  .photo-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: rgba(245,240,232,0.3);
+    text-align: center;
+    padding: 40px;
+    width: 100%;
+    height: 100%;
+  }
+  .ph-icon { font-size: 48px; margin-bottom: 8px; }
+  .ph-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
+  .ph-desc { font-size: 11px; opacity: 0.5; max-width: 220px; line-height: 1.7; }
+
+  .photo-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, var(--black) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    background: var(--red);
+    padding: 14px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee-inner {
+    display: inline-flex;
+    animation: marquee 18s linear infinite;
+  }
+  .marquee-inner span { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; color: var(--cream); padding: 0 40px; }
+  .marquee-inner span.dot { color: var(--gold); padding: 0 10px; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* CARDS */
+  .section { padding: 100px 60px; max-width: 1300px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 9px; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 60px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(201,168,76,0.25); }
+
+  .cards-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+
+  .card {
+    background: #191919; padding: 44px 38px; position: relative;
+    overflow: hidden; transition: transform 0.4s cubic-bezier(0.23,1,0.32,1); cursor: none;
+  }
+  .card::before {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px; background: var(--red);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.5s cubic-bezier(0.23,1,0.32,1);
+  }
+  .card:hover { transform: translateY(-6px); }
+  .card:hover::before { transform: scaleX(1); }
+  .card-num { font-family: 'Bebas Neue', sans-serif; font-size: 64px; color: rgba(245,240,232,0.06); position: absolute; top: 20px; right: 24px; line-height: 1; }
+  .card-icon { font-size: 28px; margin-bottom: 24px; }
+  .card-title { font-family: 'Playfair Display', serif; font-size: 22px; font-style: italic; color: var(--cream); margin-bottom: 14px; line-height: 1.3; }
+  .card-body { font-size: 11.5px; line-height: 1.9; color: rgba(245,240,232,0.5); letter-spacing: 0.3px; }
+
+  /* PHOTO ROW */
+  .photo-row { display: grid; grid-template-columns: 1fr 1.4fr; gap: 2px; }
+  .photo-row-wrap { max-width: 1300px; margin: 0 auto; padding: 0 0 2px; }
+
+  .photo-card {
+    aspect-ratio: 4/5; background: #191919;
+    position: relative; overflow: hidden;
+  }
+  .photo-card.tall { aspect-ratio: 3/4; }
+  .photo-card img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: contrast(1.05) saturate(0.8);
+    transition: transform 6s ease, filter 0.5s;
+  }
+  .photo-card:hover img { transform: scale(1.05); filter: contrast(1.1) saturate(1); }
+  .photo-card-label {
+    position: absolute; bottom: 24px; left: 24px;
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); z-index: 2;
+  }
+  .photo-card::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(17,16,16,0.7) 0%, transparent 50%);
+  }
+  .photo-inner-placeholder {
+    width: 100%; height: 100%; min-height: 300px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px; text-align: center; padding: 40px;
+    color: rgba(245,240,232,0.3);
+  }
+
+  /* BDAY */
+  .bday-section {
+    padding: 120px 60px; background: #0e0e0e;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .bday-bg-text {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    font-family: 'Bebas Neue', sans-serif; font-size: clamp(80px,15vw,200px);
+    color: rgba(192,57,43,0.06); white-space: nowrap; pointer-events: none;
+    letter-spacing: -5px; user-select: none;
+  }
+  .bday-eyebrow { font-size: 9px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); margin-bottom: 32px; }
+  .bday-statement {
+    font-family: 'Playfair Display', serif; font-size: clamp(28px,4.5vw,58px);
+    line-height: 1.25; max-width: 800px; margin: 0 auto 48px; color: var(--cream);
+  }
+  .bday-statement .highlight { color: var(--red); font-style: italic; }
+  .bday-badge {
+    display: inline-block; border: 1px solid var(--gold); padding: 14px 36px;
+    font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold);
+    position: relative; overflow: hidden; transition: all 0.4s; cursor: none;
+  }
+  .bday-badge::before {
+    content: ''; position: absolute; inset: 0; background: var(--gold);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.23,1,0.32,1); z-index: 0;
+  }
+  .bday-badge span { position: relative; z-index: 1; transition: color 0.4s; }
+  .bday-badge:hover::before { transform: scaleX(1); }
+  .bday-badge:hover span { color: var(--black); }
+
+  /* TRAITS */
+  .traits-section { background: var(--cream); padding: 100px 60px; }
+  .traits-inner { max-width: 1300px; margin: 0 auto; }
+  .traits-section .section-label { color: rgba(17,16,16,0.4); }
+  .traits-section .section-label::after { background: rgba(17,16,16,0.15); }
+  .traits-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: rgba(17,16,16,0.1); }
+  .trait-item { background: var(--cream); padding: 40px 30px; text-align: center; transition: background 0.3s; cursor: none; }
+  .trait-item:hover { background: var(--black); }
+  .trait-item:hover .trait-word { color: var(--red); }
+  .trait-item:hover .trait-desc { color: rgba(245,240,232,0.5); }
+  .trait-word { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; color: var(--black); display: block; margin-bottom: 10px; transition: color 0.3s; }
+  .trait-desc { font-size: 10px; letter-spacing: 1px; color: rgba(17,16,16,0.45); line-height: 1.7; transition: color 0.3s; }
+
+  /* FOOTER */
+  footer { padding: 60px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(245,240,232,0.08); }
+  .footer-name { font-family: 'Playfair Display', serif; font-size: 28px; font-style: italic; color: var(--cream); }
+  .footer-note { font-size: 10px; letter-spacing: 2px; color: rgba(245,240,232,0.3); text-transform: uppercase; }
+  .footer-heart { color: var(--red); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { height: 60vw; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .photo-row { grid-template-columns: 1fr; }
+    .traits-grid { grid-template-columns: repeat(2,1fr); }
+    .section, .bday-section, .traits-section { padding: 60px 24px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-tag">est. a few years ago · indo-canadian · certified</p>
+    <h1 class="hero-name">
+      Rasika
+      <span>happy birthday, babe.</span>
+    </h1>
+    <p class="hero-quote">
+      "since it's ur bday so i won't be spanking ya ass today"<br><br>
+      — your deeply generous, incredibly kind, smart, sexy incredibly ALPHA touch food 
+    </p>
+  </div>
+
+  <div class="hero-right">
+    <div class="photo-hero">
+      <!--
+        ════════════════════════════════════
+        📸 PHOTO SLOT 1 — HERO PHOTO
+        Best pick: A strong face or full-body shot.
+        Confident, maybe slightly smouldering.
+        TO USE: delete the div.photo-placeholder below
+        and replace with: <img src="photo1.jpg" alt="Rasika">
+        ════════════════════════════════════
+      
+      <div class="photo-placeholder">
+        <div class="ph-icon">📸</div>
+        <div class="ph-label">Photo Slot 1 — Hero</div>
+        <div class="ph-desc">Best strong photo — full body or face close-up. Replace this placeholder with your &lt;img&gt; tag.</div>
+      </div>
+    </div>
+    <div class="photo-hero-overlay"></div>
+  </div> -->
+  <img src="images/happy.png" alt="Rasika">
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-inner">
+    <span>Nonchalant</span><span class="dot">✦</span>
+    <span>Iconic</span><span class="dot">✦</span>
+    <span>Childlike Wonder</span><span class="dot">✦</span>
+    <span>Deeply Wise</span><span class="dot">✦</span>
+    <span>Irresistibly Hot</span><span class="dot">✦</span>
+    <span>Indo-Canadian Energy</span><span class="dot">✦</span>
+    <span>Nonchalant</span><span class="dot">✦</span>
+    <span>Iconic</span><span class="dot">✦</span>
+    <span>Childlike Wonder</span><span class="dot">✦</span>
+    <span>Deeply Wise</span><span class="dot">✦</span>
+    <span>Irresistibly Hot</span><span class="dot">✦</span>
+    <span>Indo-Canadian Energy</span><span class="dot">✦</span>
+  </div>
+</div>
+
+<!-- CARDS -->
+<div class="section">
+  <div class="section-label">the rasika files</div>
+  <div class="cards-grid">
+    <div class="card">
+      <div class="card-num">01</div>
+      <div class="card-icon">😌</div>
+      <h3 class="card-title">Unbothered, Always</h3>
+      <p class="card-body">She walks into a room and the room adjusts itself. Not arrogance — just a quiet, settled certainty that she's exactly where she's supposed to be. Nonchalant is an understatement.</p>
+    </div>
+    <div class="card">
+      <div class="card-num">02</div>
+      <div class="card-icon">🧸</div>
+      <h3 class="card-title">Big Kid Energy</h3>
+      <p class="card-body">There's a part of her that never stopped seeing the world as genuinely delightful and a little bit magical. She laughs at the right things and finds wonder in ridiculous ones. It's a gift.</p>
+    </div>
+    <div class="card">
+      <div class="card-num">03</div>
+      <div class="card-icon">🔥</div>
+      <h3 class="card-title">Objectively Hot</h3>
+      <p class="card-body">This is not up for debate. We're not entertaining alternative viewpoints. Science, general consensus, and your own two eyes have confirmed it. Moving on.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PHOTO ROW -->
+<div class="photo-row-wrap">
+  <div class="photo-row">
+
+    <div class="photo-card">
+      <!--
+        ════════════════════════════════════
+        📸 PHOTO SLOT 2 — CANDID / FUN
+        Best pick: Laughing, mid-moment, natural.
+        Something real, not posed.
+        TO USE: delete the div.photo-inner-placeholder below
+        and replace with: <img src="photo2.jpg" alt="Rasika">
+        ════════════════════════════════════
+      
+      <div class="photo-inner-placeholder">
+        <div class="ph-icon">📸</div>
+        <div class="ph-label" style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#c9a84c;">Photo Slot 2 — Candid</div>
+        <div class="ph-desc" style="font-size:11px;opacity:0.5;max-width:180px;line-height:1.7;">Laughing or natural candid shot. Replace this with your img tag.</div>
+      </div>
+      <div class="photo-card-label">candid</div>
+    </div>
+  -->
+    <img src="images/teeth.png" alt="Rasika">
+
+    <div class="photo-card tall">
+      <!--
+        ════════════════════════════════════
+        📸 PHOTO SLOT 3 — THE LOOK™
+        Best pick: Dressed up, glam, confident.
+        The one where she looks undeniably it.
+        TO USE: delete the div.photo-inner-placeholder below
+        and replace with: <img src="photo3.jpg" alt="Rasika">
+        ════════════════════════════════════
+      
+      <div class="photo-inner-placeholder">
+        <div class="ph-icon">✨</div>
+        <div class="ph-label" style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#c9a84c;">Photo Slot 3 — The Look™</div>
+        <div class="ph-desc" style="font-size:11px;opacity:0.5;max-width:180px;line-height:1.7;">The glam / confident / dressed-up shot. Replace this with your img tag.</div>
+      </div>
+      <div class="photo-card-label">the look™</div>
+    </div>
+  -->
+    <img src="images/rasika_helmet.png" alt="Rasika">
+
+  </div>
+</div>
+
+<!-- BDAY STATEMENT -->
+<div class="bday-section">
+  <div class="bday-bg-text" aria-hidden="true">BDAY</div>
+  <p class="bday-eyebrow">a note of deep sincerity</p>
+  <h2 class="bday-statement">
+    She's wise beyond what she lets on,<br>
+    hot beyond what she admits,<br>
+    and <span class="highlight">free beyond what she needs to explain.</span>
+  </h2>
+  <div class="bday-badge"><span>happy birthday, rasika ✦</span></div>
+</div>
+
+<!-- TRAITS -->
+<div class="traits-section">
+  <div class="traits-inner">
+    <div class="section-label">her defining traits</div>
+    <div class="traits-grid">
+      <div class="trait-item">
+        <span class="trait-word">Wise</span>
+        <p class="trait-desc">Drops truth bombs between sips of coffee without blinking</p>
+      </div>
+      <div class="trait-item">
+        <span class="trait-word">Chill</span>
+        <p class="trait-desc">The calm in someone else's storm. Zero drama, all presence</p>
+      </div>
+      <div class="trait-item">
+        <span class="trait-word">Playful</span>
+        <p class="trait-desc">Finds the joke in everything, never loses the plot doing it</p>
+      </div>
+      <div class="trait-item">
+        <span class="trait-word">Real</span>
+        <p class="trait-desc">Canadian raised, fully herself — no performance required</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">Rasika</div>
+  <div class="footer-note">made with <span class="footer-heart">♥</span> &amp; a lot of audacity</div>
+  <div class="footer-note">bday edition</div>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+
+  (function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  })();
+
+  document.querySelectorAll('.card, .bday-badge, .trait-item').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+      ring.style.transform = 'translate(-50%,-50%) scale(1.5)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.transform = 'translate(-50%,-50%) scale(1)';
+    });
+  });
+</script>
+</body>
+</html>
